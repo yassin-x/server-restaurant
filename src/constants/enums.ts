@@ -1,0 +1,28 @@
+export enum Enviroments {
+  PROD = "production",
+  DEV = "development",
+}
+
+export enum AuditAction {
+  USER_LOGIN = "USER_LOGIN",
+  USER_LOGOUT = "USER_LOGOUT",
+  PROFILE_CREATE = "PROFILE_CREATE",
+  PROFILE_UPDATE = "PROFILE_UPDATE",
+  PROJECT_CREATE = "PROJECT_CREATE",
+  PROJECT_UPDATE = "PROJECT_UPDATE",
+  PROJECT_DELETE = "PROJECT_DELETE",
+  SUBSCRIPTION_UPGRADE = "SUBSCRIPTION_UPGRADE",
+  PAYMENT_CREATED = "PAYMENT_CREATED",
+}
+
+export enum AuditEntityType {
+  USER = "USER",
+  PROFILE = "PROFILE",
+  PROJECT = "PROJECT",
+  SUBSCRIPTION = "SUBSCRIPTION",
+  PAYMENT = "PAYMENT",
+}
+
+export enum CloudinaryFolders {
+  MENU = "MENU",
+}

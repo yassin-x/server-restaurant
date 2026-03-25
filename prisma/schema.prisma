@@ -1,0 +1,111 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id       String  @id @default(uuid())
+  email    String  @unique
+  fullName String
+  role     Role    @default(USER)
+  password String
+  phone    String
+  city     String
+  address1 String
+  address2 String?
+
+  orders Order[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Menu {
+  id          String @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  discount    Float? @default(0)
+  image       String
+
+  category    MenuCategory
+  isAvailable Boolean      @default(true)
+  orderItems  OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderItem {
+  id       String @id @default(uuid())
+  order    Order  @relation(fields: [orderId], references: [id])
+  orderId  String
+  menu     Menu   @relation(fields: [menuId], references: [id])
+  menuId   String
+  quantity Int    @default(1)
+}
+
+model Order {
+  id         String      @id @default(uuid())
+  orderItems OrderItem[]
+  totalPrice Float
+  status     OrderStatus @default(PENDING)
+  paymentWay PaymentWay?
+
+  user    User     @relation(fields: [userId], references: [id])
+  userId  String
+  payment Payment? @relation
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Payment {
+  id         String        @id @default(uuid())
+  order      Order         @relation(fields: [orderId], references: [id])
+  orderId    String        @unique
+  status     PaymentStatus
+  paymentWay PaymentWay
+  sessionId  String        @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum Role {
+  USER
+  CLIENT
+  STAFF
+  OWNER
+}
+
+enum PaymentWay {
+  PAYPAL
+  STRIPE
+}
+
+enum MenuCategory {
+  PIZZA
+  BURGER
+  DRINKS
+}
