@@ -19,7 +19,7 @@
     "noEmit": true,
     "isolatedModules": true,
     "declaration": false,
-    "sourceMap": true
+    "sourceMap": true,
   },
   "ts-node": {
     "esm": true,
