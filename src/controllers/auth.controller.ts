@@ -15,7 +15,7 @@ export const signUp = catchError(async (req, res) => {
       statusCode: 400,
       success: false,
       status: "fail",
-      message: "Please provide all required fields",
+      message: "خطاء في البيانات المدخلة، يرجى التأكد من إدخال جميع الحقول المطلوبة",
     });
   }
 
@@ -25,7 +25,7 @@ export const signUp = catchError(async (req, res) => {
       statusCode: 400,
       success: false,
       status: "fail",
-      message: "Email already exists",
+      message: "البريد الإلكتروني موجود بالفعل",
     });
   }
 
@@ -48,7 +48,7 @@ export const signUp = catchError(async (req, res) => {
     statusCode: 201,
     success: true,
     status: "success",
-    message: "User created successfully",
+    message: "تم إنشاء المستخدم بنجاح",
     data: {
       user: userWithoutPassword,
     },
@@ -62,7 +62,7 @@ export const signIn = catchError(async (req, res) => {
       statusCode: 400,
       success: false,
       status: "fail",
-      message: "Please provide email and password",
+      message: "يرجى تقديم البريد الإلكتروني وكلمة المرور",
     });
   }
 
@@ -72,7 +72,7 @@ export const signIn = catchError(async (req, res) => {
       statusCode: 404,
       success: false,
       status: "fail",
-      message: "User not found",
+      message: "المستخدم غير موجود",
     });
   }
   const isValidPasssword = bcrypt.compareSync(password, user.password);
@@ -81,7 +81,7 @@ export const signIn = catchError(async (req, res) => {
       statusCode: 400,
       success: false,
       status: "fail",
-      message: "Invalid password",
+      message: "كلمة المرور غير صحيحة",
     });
   }
 
@@ -100,7 +100,7 @@ export const signIn = catchError(async (req, res) => {
     statusCode: 200,
     success: true,
     status: "success",
-    message: "User signed in successfully",
+    message: "تم تسجيل الدخول بنجاح",
     data: {
       user: userWithoutPassword,
     },
@@ -114,7 +114,7 @@ export const refreshToken = catchError(async (req, res) => {
       statusCode: 401,
       success: false,
       status: "fail",
-      message: "Unauthorized",
+      message: "غير مصرح",
     });
   }
   await refreshAccessToken(res, userId, req.sessionId as string);
@@ -123,7 +123,7 @@ export const refreshToken = catchError(async (req, res) => {
     statusCode: 200,
     success: true,
     status: "success",
-    message: "Access token refreshed successfully",
+    message: "تم تحديث رمز الوصول بنجاح",
   });
 });
 
@@ -135,7 +135,7 @@ export const signOut = catchError(async (req, res) => {
       statusCode: 401,
       success: false,
       status: "fail",
-      message: "Unauthorized",
+      message: "غير مصرح",
     });
   }
 
@@ -151,7 +151,7 @@ export const signOut = catchError(async (req, res) => {
     statusCode: 200,
     success: true,
     status: "success",
-    message: "User signed out successfully",
+    message: "تم تسجيل الخروج بنجاح",
   });
 });
 
@@ -162,7 +162,7 @@ export const signOutAll = catchError(async (req, res) => {
       statusCode: 401,
       success: false,
       status: "fail",
-      message: "Unauthorized",
+      message: "غير مصرح",
     });
   }
 
@@ -178,7 +178,7 @@ export const signOutAll = catchError(async (req, res) => {
     statusCode: 200,
     success: true,
     status: "success",
-    message: "User signed out from all devices successfully",
+    message: "تم تسجيل الخروج من جميع الأجهزة بنجاح",
   });
 });
 
@@ -189,7 +189,7 @@ export const getCurrentUser = catchError(async (req, res) => {
       statusCode: 401,
       success: false,
       status: "fail",
-      message: "Unauthorized",
+      message: "غير مصرح",
     });
   }
 
@@ -197,7 +197,7 @@ export const getCurrentUser = catchError(async (req, res) => {
     statusCode: 200,
     success: true,
     status: "success",
-    message: "User fetched successfully",
+    message: "تم استرجاع بيانات المستخدم بنجاح",
     data: {
       user,
     },

@@ -94,7 +94,7 @@ export const testPayment = catchError(async (req, res) => {
     statusCode: 200,
     success: true,
     status: "success",
-    message: "Checkout session created successfully",
+    message: "تم إنشاء جلسة الدفع بنجاح",
     data: {
       sessionId: testPaymentSession.id,
       sessionUrl: testPaymentSession.url,
@@ -123,7 +123,7 @@ export const checkPayment = catchError(async (req, res) => {
         statusCode: 404,
         success: false,
         status: "fail",
-        message: "Payment not found",
+        message: "الدفع غير موجود",
       });
     }
 
@@ -148,6 +148,6 @@ export const checkPayment = catchError(async (req, res) => {
     statusCode: 200,
     success: true,
     status: "success",
-    message: "Payment checked successfully",
+    message: "تم التحقق من الدفع بنجاح",
   });
 });

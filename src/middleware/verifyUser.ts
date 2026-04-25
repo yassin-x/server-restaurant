@@ -43,7 +43,6 @@ export const verifyUser = catchError(async (req, res, next) => {
     });
   }
 
-  
   const cacheKey = redisKeys.userAuth(decoded.userId);
   const cachedUser = await redis.get(cacheKey);
 
@@ -70,6 +69,7 @@ export const verifyStaff = catchError(async (req, res, next) => {
       message: "Forbidden - staff access only",
     });
   }
+  next();
 });
 
 export const verifyOwner = catchError(async (req, res, next) => {
@@ -81,4 +81,5 @@ export const verifyOwner = catchError(async (req, res, next) => {
       message: "Forbidden - owner access only",
     });
   }
+  next();
 });

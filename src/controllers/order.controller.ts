@@ -11,7 +11,7 @@ export const createOrder = catchError(async (req, res) => {
       statusCode: 400,
       success: false,
       status: "fail",
-      message: "Please provide all required fields",
+      message: "يرجى تقديم جميع الحقول المطلوبة",
     });
   }
 
@@ -40,7 +40,7 @@ export const createOrder = catchError(async (req, res) => {
     statusCode: 201,
     success: true,
     status: "success",
-    message: "Order created successfully",
+    message: "تم إنشاء الطلب بنجاح",
     data: {
       order,
     },
@@ -64,7 +64,7 @@ export const getOrders = catchError(async (req, res) => {
     statusCode: 200,
     success: true,
     status: "success",
-    message: "Orders fetched successfully",
+    message: "تم استرجاع الطلبات بنجاح",
     data: {
       orders,
     },
@@ -89,7 +89,7 @@ export const getOrderById = catchError(async (req, res) => {
     statusCode: 200,
     success: true,
     status: "success",
-    message: "Order fetched successfully",
+    message: "تم استرجاع الطلب بنجاح",
     data: {
       order,
     },
@@ -107,6 +107,6 @@ export const deleteOrder = catchError(async (req, res) => {
     statusCode: 200,
     success: true,
     status: "success",
-    message: "Order deleted successfully",
+    message: "تم حذف الطلب بنجاح",
   });
 });

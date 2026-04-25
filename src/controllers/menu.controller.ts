@@ -16,7 +16,8 @@ export const createMenu = catchError(async (req, res) => {
       statusCode: 400,
       success: false,
       status: "error",
-      message: "Bad Request: Missing required fields",
+      message:
+        "خطاء في البيانات المدخلة، يرجى التأكد من إدخال جميع الحقول المطلوبة",
     });
   }
   const image = req.file;
@@ -25,7 +26,7 @@ export const createMenu = catchError(async (req, res) => {
       statusCode: 400,
       success: false,
       status: "error",
-      message: "Bad Request: Image file is required",
+      message: "خطاء في البيانات المدخلة، يرجى التأكد من إدخال ملف الصورة",
     });
   }
   const imageUrl = await addCloudinaryImage(
@@ -38,7 +39,7 @@ export const createMenu = catchError(async (req, res) => {
       statusCode: 500,
       success: false,
       status: "error",
-      message: "Internal Server Error: Failed to upload image",
+      message: "خطاء في الخادم الداخلي: فشل في رفع الصورة",
     });
   }
   const menu = await db.menu.create({
@@ -46,7 +47,7 @@ export const createMenu = catchError(async (req, res) => {
       name,
       description,
       price: parseFloat(price),
-      discount: parseFloat(discount),
+      discount: discount ? parseFloat(discount) : 0,
       category: category as MenuCategory,
       image: imageUrl,
       isAvailable,
@@ -57,7 +58,7 @@ export const createMenu = catchError(async (req, res) => {
     statusCode: 201,
     success: true,
     status: "success",
-    message: "Menu item created successfully",
+    message: "تم إنشاء عنصر القائمة بنجاح",
     data: {
       menu,
     },
@@ -72,7 +73,7 @@ export const updateMenu = catchError(async (req, res) => {
       statusCode: 404,
       success: false,
       status: "error",
-      message: "Menu item not found",
+      message: "عنصر القائمة غير موجود",
     });
   }
 
@@ -83,7 +84,8 @@ export const updateMenu = catchError(async (req, res) => {
       statusCode: 400,
       success: false,
       status: "error",
-      message: "Bad Request: Missing required fields",
+      message:
+        "خطاء في البيانات المدخلة، يرجى التأكد من إدخال جميع الحقول المطلوبة",
     });
   }
   const image = req.file;
@@ -107,7 +109,7 @@ export const updateMenu = catchError(async (req, res) => {
       name,
       description,
       price: parseFloat(price),
-      discount: parseFloat(discount),
+      discount: discount ? parseFloat(discount) : 0,
       category: category as MenuCategory,
       image: newImageUrl || oldMenu.image,
       isAvailable,
@@ -118,35 +120,35 @@ export const updateMenu = catchError(async (req, res) => {
     statusCode: 200,
     success: true,
     status: "success",
-    message: "Menu item updated successfully",
+    message: "تم تحديث عنصر القائمة بنجاح",
     data: {
       menu: updatedMenu,
     },
   });
 });
 
-export const deleteMenu = catchError(async (req, res) => {
-  const { id } = req.params;
-  const menu = await db.menu.findUnique({ where: { id: id as string } });
-  if (!menu) {
-    return Res(res, {
-      statusCode: 404,
-      success: false,
-      status: "error",
-      message: "Menu item not found",
-    });
-  }
-  const imagePublicId = menu.image.split("/").slice(-1)[0].split(".")[0];
-  await deleteCloudinaryImage(imagePublicId, CloudinaryFolders.MENU);
-  await db.menu.delete({ where: { id: id as string } });
+// export const deleteMenu = catchError(async (req, res) => {
+//   const { id } = req.params;
+//   const menu = await db.menu.findUnique({ where: { id: id as string } });
+//   if (!menu) {
+//     return Res(res, {
+//       statusCode: 404,
+//       success: false,
+//       status: "error",
+//       message: "Menu item not found",
+//     });
+//   }
+//   const imagePublicId = menu.image.split("/").slice(-1)[0].split(".")[0];
+//   await deleteCloudinaryImage(imagePublicId, CloudinaryFolders.MENU);
+//   await db.menu.delete({ where: { id: id as string } });
 
-  Res(res, {
-    statusCode: 200,
-    success: true,
-    status: "success",
-    message: "Menu item deleted successfully",
-  });
-});
+//   Res(res, {
+//     statusCode: 200,
+//     success: true,
+//     status: "success",
+//     message: "Menu item deleted successfully",
+//   });
+// });
 
 export const getAllMenus = catchError(async (req, res) => {
   const menus = await db.menu.findMany();
@@ -154,9 +156,31 @@ export const getAllMenus = catchError(async (req, res) => {
     statusCode: 200,
     success: true,
     status: "success",
-    message: "Menu items fetched successfully",
+    message: "تم استرجاع عناصر القائمة بنجاح",
     data: {
       menus,
+    },
+  });
+});
+
+export const getMenuById = catchError(async (req, res) => {
+  const { id } = req.params;
+  const menu = await db.menu.findUnique({ where: { id: id as string } });
+  if (!menu) {
+    return Res(res, {
+      statusCode: 404,
+      success: false,
+      status: "error",
+      message: "عنصر القائمة غير موجود",
+    });
+  }
+  Res(res, {
+    statusCode: 200,
+    success: true,
+    status: "success",
+    message: "تم استرجاع عنصر القائمة بنجاح",
+    data: {
+      menu,
     },
   });
 });
@@ -169,7 +193,7 @@ export const availableMenu = catchError(async (req, res) => {
       statusCode: 404,
       success: false,
       status: "error",
-      message: "Menu item not found",
+      message: "عنصر القائمة غير موجود",
     });
   }
   const updatedMenu = await db.menu.update({
@@ -183,7 +207,7 @@ export const availableMenu = catchError(async (req, res) => {
     statusCode: 200,
     success: true,
     status: "success",
-    message: `Menu item is now ${updatedMenu.isAvailable ? "available" : "unavailable"}`,
+    message: `عنصر القائمة الآن ${updatedMenu.isAvailable ? "متاح" : "غير متاح"}`,
     data: {
       menu: updatedMenu,
     },
